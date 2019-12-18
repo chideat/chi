@@ -4,6 +4,7 @@ import (
 	"context"
 	"net"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -71,6 +72,9 @@ func (x *Context) Reset() {
 func (x *Context) URLParam(key string) string {
 	for k := len(x.URLParams.Keys) - 1; k >= 0; k-- {
 		if x.URLParams.Keys[k] == key {
+			if val, err := url.QueryUnescape(x.URLParams.Values[k]); err == nil {
+				return val
+			}
 			return x.URLParams.Values[k]
 		}
 	}
